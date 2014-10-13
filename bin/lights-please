@@ -1,0 +1,12 @@
+#!/usr/bin/env coffee
+
+server = require '../src/server'
+fs = require 'fs'
+yaml = require 'js-yaml'
+os = require 'os'
+
+if process.argv.length != 3
+  console.error "You need to give me a config file!"
+  process.exit -1
+
+srv = new server yaml.safeLoad(fs.readFileSync(process.argv[2], 'utf8'))

@@ -1,0 +1,45 @@
+ola:
+  host: http://localhost:9090/
+  universe: 0
+  mock: true
+
+groups:
+
+  Test_Group_1:
+
+    RGB_Strip_1:
+      type: rgb_strip
+      position:
+        x: 10
+        y: 10
+      channels:
+        r: 1
+        g: 2
+        b: 3
+
+    White_Strip_1:
+      type: strip
+      position:
+        x: 15
+        y: 10
+      channel: 4
+
+    Spot_2:
+      type: spot
+      position:
+        x: 10
+        y: 20
+      channel: 5
+
+  Test_Group_2:
+
+    Spot_1:
+      type: spot
+      position:
+        x: 33
+        y: 66
+      channel: 6
+
+general:
+  update_hz: 30
+  port: 5001

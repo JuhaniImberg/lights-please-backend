@@ -1,0 +1,20 @@
+{
+  "name": "lights-please-backend",
+  "version": "0.0.1",
+  "description": "Backend for Lights-Please.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "exec": "coffee ./bin/lights-please"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "coffee-script": "",
+    "js-yaml": "^3.2.2",
+    "socket.io": "^1.1.0"
+  },
+  "bin": {
+    "lights-please": "./bin/lights-please"
+  }
+}
