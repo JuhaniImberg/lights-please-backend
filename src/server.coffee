@@ -1,5 +1,8 @@
 http = require 'http'
 SocketIO = require 'socket.io'
+
+request = require 'request'
+
 Channel = require './channel'
 Light = require './light'
 Group = require './group'
@@ -43,10 +46,29 @@ class Server extends Base
   check_dirty: () ->
     if @dirty
       @send_ws()
+      @send_ola()
+      process.stdout.write "O"
       @dirty = false
 
+  send_ola: ->
+    if @config.ola.mock then return
+    channels = (0 for i in [0..512])
+    for group in @groups
+      group.to_channels channels
+    data = {
+      form: {
+        d: channels.join ","
+        u: @config.ola.universe
+      }
+    }
+    request.post @config.ola.host + "set_dmx", data, (error, response, b) ->
+      if error
+        process.stdout.write "\nOLA error\n"
+        console.log error
+        console.log response
+
+
   send_ws: () ->
-    process.stdout.write "O"
     @server.emit "update", {groups: (group.to_json() for group in @groups)}
 
 

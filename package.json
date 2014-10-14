@@ -12,6 +12,7 @@
   "dependencies": {
     "coffee-script": "",
     "js-yaml": "^3.2.2",
+    "request": "^2.45.0",
     "socket.io": "^1.1.0"
   },
   "bin": {
