@@ -22,6 +22,8 @@ class Group extends Base
     @size.w = max.x - min.x
     @size.h = max.y - min.y
     @master = new Channel(-1, 255)
+    @master.smoothing = false
+    @add_child @master
 
   set: (value) ->
     @master.set value

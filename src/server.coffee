@@ -41,7 +41,8 @@ class Server extends Base
         for group in data.groups
           for ingroup in @groups
             if group.name == ingroup.name
-              ingroup.update(group.lights)
+              ingroup.set group.value if group.value?
+              ingroup.update group.lights if group.lights?
 
   check_dirty: () ->
     if @dirty

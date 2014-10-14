@@ -2,11 +2,16 @@
 
 class Channel extends EventEmitter
   constructor: (@id, @value) ->
+    @smoothing = true
 
   set: (val) ->
     val = Math.min(255, Math.max(0, val))
     if val != @value
-      @set_smooth(0, @value, val - @value, 20)
+      if @smoothing
+        @set_smooth(0, @value, val - @value, 20)
+      else
+        @emit "changed"
+        @value = val
 
   set_smooth: (step, start, target, steps) ->
     @value = Math.round(@smooth(step, start, target, steps))
