@@ -12,13 +12,19 @@ class Light extends Base
       @channels = {}
       for channel of @args.channels
         @channels[channel] = new Channel(@args.channels[channel], 0)
+    @active = false
 
     for channel of @channels
       @add_child @channels[channel]
 
   update: (light) ->
+    @active = false
+    if not light.channels? then return false
     for channel of @channels
-      @channels[channel].set light.channels[channel].value
+      if @channels[channel].set(light.channels[channel].value)
+        if light.channels[channel].value != 0
+          @active = true
+    return @active
 
   to_json: () ->
     channels = {}

@@ -1,8 +1,7 @@
 {EventEmitter} = require 'events'
 
 class Channel extends EventEmitter
-  constructor: (@id, @value) ->
-    @smoothing = true
+  constructor: (@id, @value, @smoothing=true) ->
 
   set: (val) ->
     val = Math.min(255, Math.max(0, val))
@@ -12,6 +11,8 @@ class Channel extends EventEmitter
       else
         @emit "changed"
         @value = val
+      return true
+    return false
 
   set_smooth: (step, start, target, steps) ->
     @value = Math.round(@smooth(step, start, target, steps))

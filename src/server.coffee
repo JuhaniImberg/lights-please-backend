@@ -35,13 +35,18 @@ class Server extends Base
       process.stdout.write "C"
       @send_ws()
 
+      socket.on "toggle", (data) =>
+        process.stdout.write "T"
+        for group in @groups
+          if data.group.name == group.name
+            group.toggle()
+
       socket.on "update", (data) =>
         # console.log data
         process.stdout.write "I"
         for group in data.groups
           for ingroup in @groups
             if group.name == ingroup.name
-              ingroup.set group.value if group.value?
               ingroup.update group.lights if group.lights?
 
   check_dirty: () ->

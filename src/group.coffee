@@ -21,31 +21,35 @@ class Group extends Base
     @size.y = min.y
     @size.w = max.x - min.x
     @size.h = max.y - min.y
-    @master = new Channel(-1, 255)
-    @master.smoothing = false
-    @add_child @master
+    @active = false
 
-  set: (value) ->
-    @master.set value
+  toggle: ->
+    @active = !@active
+    for light in @lights
+      for channel_name of light.channels
+        channel = light.channels[channel_name]
+        channel.set 255 * @active
 
   update: (lights) ->
+    @active = false
     for light in lights
       for inlight in @lights
         if light.name == inlight.name
-          inlight.update(light)
+          if inlight.update(light)
+            @active = true
 
   to_channels: (channels) ->
     for light in @lights
       for channel_name of light.channels
         channel = light.channels[channel_name]
-        channels[channel.id-1] = Math.round( (@master.get()/255) * channel.get() )
+        channels[channel.id-1] = channel.get()
 
   to_json: () ->
     return {
       name: @name
       lights: (light.to_json() for light in @lights)
       size: @size
-      value: @master.get()
+      active: @active
     }
 
 module.exports = Group
