@@ -1,4 +1,4 @@
-Base = require './base'
+Base    = require './base'
 Channel = require './channel'
 
 class Light extends Base

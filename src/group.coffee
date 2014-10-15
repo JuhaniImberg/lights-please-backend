@@ -1,4 +1,4 @@
-Base = require './base'
+Base    = require './base'
 Channel = require './channel'
 
 class Group extends Base
@@ -31,12 +31,15 @@ class Group extends Base
         channel.set 255 * @active
 
   update: (lights) ->
-    @active = false
     for light in lights
       for inlight in @lights
         if light.name == inlight.name
-          if inlight.update(light)
-            @active = true
+          inlight.update(light)
+    for light in @lights
+      for channel_name of light.channels
+        channel = light.channels[channel_name]
+        if channel.value != 0
+          @active = true
 
   to_channels: (channels) ->
     for light in @lights

@@ -1,12 +1,13 @@
-http = require 'http'
-SocketIO = require 'socket.io'
+http      = require 'http'
 
-request = require 'request'
+SocketIO  = require 'socket.io'
+request   = require 'request'
 
-Channel = require './channel'
-Light = require './light'
-Group = require './group'
-Base = require './base'
+Channel   = require './channel'
+Light     = require './light'
+Group     = require './group'
+Preset    = require './preset'
+Base      = require './base'
 
 class Server extends Base
   constructor: (@config) ->
@@ -26,6 +27,7 @@ class Server extends Base
       gro.on "changed", () =>
         @dirty = true
 
+    @presets = []
 
     @interval = setInterval( () =>
       @check_dirty()
@@ -42,12 +44,29 @@ class Server extends Base
             group.toggle()
 
       socket.on "update", (data) =>
-        # console.log data
         process.stdout.write "I"
         for group in data.groups
           for ingroup in @groups
             if group.name == ingroup.name
               ingroup.update group.lights if group.lights?
+
+      socket.on "save", (data) =>
+        process.stdout.write "S"
+        for preset in @presets
+          if preset.name == data.name
+            preset.save_state @
+            return
+        preset = new Preset(data.name)
+        preset.save_state @
+        @dirty = true
+        @presets.push preset
+
+      socket.on "load", (data) =>
+        process.stdout.write "L"
+        for preset in @presets
+          if preset.name == data.name
+            preset.load_state @
+            return
 
   check_dirty: () ->
     if @dirty
@@ -75,7 +94,10 @@ class Server extends Base
 
 
   send_ws: () ->
-    @server.emit "update", {groups: (group.to_json() for group in @groups)}
+    @server.emit "update", {
+      groups: (group.to_json() for group in @groups)
+      presets: (preset.to_json() for preset in @presets)
+    }
 
 
 module.exports = Server
