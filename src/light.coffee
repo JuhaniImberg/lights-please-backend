@@ -2,16 +2,19 @@ Base    = require './base'
 Channel = require './channel'
 
 class Light extends Base
-  constructor: (@name, @args) ->
+  constructor: (@data) ->
     super
-    @type = @args.type or "spot"
-    @position = @args.position or {x: 0, y: 0}
-    if @args.channel?
-      @channels = {"main": new Channel(@args.channel, 0)}
-    else if @args.channels?
+    @name = @data.name or "unnamed light"
+    @type = @data.type or "spot"
+    @position = @data.position or {x: 0, y: 0}
+
+    if @data.channel?
+      @channels = {"main": new Channel(@data.channel, 0)}
+    else if @data.channels?
       @channels = {}
-      for channel of @args.channels
-        @channels[channel] = new Channel(@args.channels[channel], 0)
+      for channel of @data.channels
+        @channels[channel] = new Channel(@data.channels[channel], 0)
+
     @active = false
 
     for channel of @channels
@@ -36,6 +39,7 @@ class Light extends Base
       type: @type
       channels: channels
       position: @position
+      type: @type
     }
 
 

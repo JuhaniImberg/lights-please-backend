@@ -19,10 +19,8 @@ class Server extends Base
       console.log "Listening on #{@config.general.port}"
 
     @groups = []
-    for group of @config.groups
-      clights = @config.groups[group]
-      lights = (new Light(name, clights[name]) for name of clights)
-      gro = new Group group, lights
+    for group in @config.groups
+      gro = new Group group
       @groups.push gro
       gro.on "changed", () =>
         @dirty = true
@@ -35,7 +33,7 @@ class Server extends Base
 
     @server.on "connection", (socket) =>
       process.stdout.write "C"
-      @send_ws()
+      @send_ws(socket)
 
       socket.on "toggle", (data) =>
         process.stdout.write "T"
@@ -45,6 +43,7 @@ class Server extends Base
 
       socket.on "update", (data) =>
         process.stdout.write "I"
+        socket.broadcast.emit "update", data
         for group in data.groups
           for ingroup in @groups
             if group.name == ingroup.name
@@ -70,7 +69,7 @@ class Server extends Base
 
   check_dirty: () ->
     if @dirty
-      @send_ws()
+      # @send_ws()
       @send_ola()
       process.stdout.write "O"
       @dirty = false
@@ -93,8 +92,8 @@ class Server extends Base
         console.log response
 
 
-  send_ws: () ->
-    @server.emit "update", {
+  send_ws: (socket) ->
+    socket.emit "full_update", {
       groups: (group.to_json() for group in @groups)
       presets: (preset.to_json() for preset in @presets)
     }

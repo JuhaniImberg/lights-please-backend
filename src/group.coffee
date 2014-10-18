@@ -1,26 +1,15 @@
 Base    = require './base'
 Channel = require './channel'
+Light   = require './light'
 
 class Group extends Base
-  constructor: (@name, @lights) ->
+  constructor: (@data) ->
     super
-    @size = {x: 0, y: 0, h: 0, w:0}
-    min = {x: 100, y: 100}
-    max = {x: 0, y: 0}
-    for light in @lights
-      if light.position.x < min.x
-        min.x = light.position.x
-      if light.position.y < min.y
-        min.y = light.position.y
-      if light.position.x > max.x
-        max.x = light.position.x
-      if light.position.y > max.y
-        max.y = light.position.y
-      @add_child light
-    @size.x = min.x
-    @size.y = min.y
-    @size.w = max.x - min.x
-    @size.h = max.y - min.y
+    @size = @data.position
+    @name = @data.name
+    @lights = []
+    for light in @data.lights
+      @lights.push new Light light
     @active = false
 
   toggle: ->

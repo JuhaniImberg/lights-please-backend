@@ -5,41 +5,146 @@ ola:
 
 groups:
 
-  Test_Group_1:
+  - name: Entrance
+    position:
+      x: 0
+      y: 60
+      w: 40
+      h: 40
+    lights:
+      - name: RGB Strip 1
+        type: rgb_strip
+        position:
+          x: 50
+          y: 50
+        channels:
+          r: 1
+          g: 2
+          b: 3
 
-    RGB_Strip_1:
-      type: rgb_strip
-      position:
-        x: 10
-        y: 10
-      channels:
-        r: 1
-        g: 2
-        b: 3
+  - name: Dining Table
+    position:
+      x: 0
+      y: 0
+      w: 60
+      h: 60
+    lights:
+      - name: Spot 1
+        position:
+          x: 30
+          y: 20
+        channel: 4
+      - name: Spot 2
+        position:
+          x: 30
+          y: 40
+        channel: 5
+      - name: Spot 3
+        position:
+          x: 30
+          y: 60
+        channel: 6
+      - name: Spot 4
+        position:
+          x: 30
+          y: 80
+        channel: 7
 
-    White_Strip_1:
-      type: strip
-      position:
-        x: 15
-        y: 10
-      channel: 4
+      - name: Spot 5
+        position:
+          x: 70
+          y: 20
+        channel: 8
+      - name: Spot 6
+        position:
+          x: 70
+          y: 40
+        channel: 9
+      - name: Spot 7
+        position:
+          x: 70
+          y: 60
+        channel: 10
+      - name: Spot 8
+        position:
+          x: 70
+          y: 80
+        channel: 11
 
-    Spot_2:
-      type: spot
-      position:
-        x: 10
-        y: 20
-      channel: 5
+  - name: Sofa & TV
+    position:
+      x: 60
+      y: 0
+      w: 40
+      h: 60
+    lights:
+      - name: Spot 9
+        position:
+          x: 15
+          y: 20
+        channel: 12
+      - name: Spot 10
+        position:
+          x: 15
+          y: 40
+        channel: 13
+      - name: Spot 11
+        position:
+          x: 15
+          y: 60
+        channel: 14
+      - name: Spot 12
+        position:
+          x: 15
+          y: 80
+        channel: 15
 
-  Test_Group_2:
+      - name: Strip 1
+        type: strip
+        position:
+          x: 50
+          y: 50
+        channel: 16
+      - name: Strip 2
+        type: strip
+        position:
+          x: 70
+          y: 50
+        channel: 17
 
-    Spot_1:
-      type: spot
-      position:
-        x: 33
-        y: 66
-      channel: 6
+  - name: Bookshelves
+    position:
+      x: 40
+      y: 60
+      w: 60
+      h: 40
+    lights:
+      - name: Spot 13
+        position:
+          x: 15
+          y: 50
+        channel: 18
+      - name: Spot 14
+        position:
+          x: 30
+          y: 50
+        channel: 19
+      - name: Spot 15
+        position:
+          x: 45
+          y: 50
+        channel: 20
+      - name: Spot 16
+        position:
+          x: 60
+          y: 50
+        channel: 21
+      - name: Spot 17
+        position:
+          x: 75
+          y: 50
+        channel: 22
 
 general:
-  update_hz: 30
   port: 5001
+  update_hz: 30

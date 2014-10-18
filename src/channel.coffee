@@ -6,7 +6,7 @@ class Channel extends EventEmitter
   set: (val) ->
     val = Math.min(255, Math.max(0, val))
     if val != @value
-      if @smoothing
+      if @smoothing and false
         @set_smooth(0, @value, val - @value, 20)
       else
         @emit "changed"
