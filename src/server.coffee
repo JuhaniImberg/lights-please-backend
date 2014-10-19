@@ -35,12 +35,6 @@ class Server extends Base
       process.stdout.write "C"
       @send_ws(socket)
 
-      socket.on "toggle", (data) =>
-        process.stdout.write "T"
-        for group in @groups
-          if data.group.name == group.name
-            group.toggle()
-
       socket.on "update", (data) =>
         process.stdout.write "I"
         socket.broadcast.emit "update", data
@@ -59,12 +53,14 @@ class Server extends Base
         preset.save_state @
         @dirty = true
         @presets.push preset
+        @push_all_ws()
 
       socket.on "load", (data) =>
         process.stdout.write "L"
         for preset in @presets
           if preset.name == data.name
             preset.load_state @
+            @push_all_ws()
             return
 
   check_dirty: () ->
@@ -91,6 +87,9 @@ class Server extends Base
         console.log error
         console.log response
 
+  push_all_ws: () ->
+    for socket in @server.sockets.sockets
+      @send_ws socket
 
   send_ws: (socket) ->
     socket.emit "full_update", {

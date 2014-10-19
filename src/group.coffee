@@ -5,19 +5,12 @@ Light   = require './light'
 class Group extends Base
   constructor: (@data) ->
     super
-    @size = @data.position
+    @position = @data.position
     @name = @data.name
     @lights = []
     for light in @data.lights
       @lights.push new Light light
     @active = false
-
-  toggle: ->
-    @active = !@active
-    for light in @lights
-      for channel_name of light.channels
-        channel = light.channels[channel_name]
-        channel.set 255 * @active
 
   update: (lights) ->
     for light in lights
@@ -40,7 +33,7 @@ class Group extends Base
     return {
       name: @name
       lights: (light.to_json() for light in @lights)
-      size: @size
+      position: @position
       active: @active
     }
 

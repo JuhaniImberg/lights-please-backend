@@ -11,6 +11,7 @@ class Preset
       for in_group in server.groups
         if group.name == in_group.name
           in_group.update group.lights if group.lights?
+          in_group.active = group.active if group.active?
 
   to_json: ->
     return {
