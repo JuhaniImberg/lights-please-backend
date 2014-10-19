@@ -1,4 +1,5 @@
 http      = require 'http'
+fs        = require 'fs'
 
 SocketIO  = require 'socket.io'
 request   = require 'request'
@@ -10,7 +11,7 @@ Preset    = require './preset'
 Base      = require './base'
 
 class Server extends Base
-  constructor: (@config) ->
+  constructor: (@config, @save_name) ->
     super
     @dirty = false
     @sock = http.createServer()
@@ -26,6 +27,10 @@ class Server extends Base
         @dirty = true
 
     @presets = []
+    fs.readFile @save_name, {encoding: 'utf8'}, (err, data) =>
+      if not err
+        for preset_data in JSON.parse(data).presets
+          @presets.push new Preset(preset_data.name, preset_data.data)
 
     @interval = setInterval( () =>
       @check_dirty()
@@ -53,6 +58,7 @@ class Server extends Base
         preset.save_state @
         @dirty = true
         @presets.push preset
+        fs.writeFile @save_name, JSON.stringify({presets: @presets})
         @push_all_ws()
 
       socket.on "load", (data) =>
